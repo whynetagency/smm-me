@@ -1,0 +1,505 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-segment [value]="activeSegment" (ionChange)="onChange($event)">
+      <ion-segment-button value="categories">Категории</ion-segment-button>
+      <ion-segment-button value="background">Фоны</ion-segment-button>
+      <ion-segment-button value="objects">Объекты</ion-segment-button>
+      <ion-segment-button value="elements">Элементы</ion-segment-button>
+      <ion-segment-button value="covers">Каверы</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="data">
+  <ion-content [fullscreen]="true">
+    <div class="ion-padding">
+      <ng-container *ngIf="activeSegment === 'categories'">
+        <ion-row>
+          <ion-col>
+            <ion-text color="primary">
+              <h2>
+                <span (click)="selectedCategory = null; categoryWasUpdated = false" style="cursor: pointer">Категории</span>
+                <span (click)="selectedSubCategory = null; subCategoryWasUpdated = false" *ngIf="selectedCategory" style="cursor: pointer"> / {{selectedCategory['title']}}</span>
+                <span *ngIf="selectedCategory && selectedSubCategory"> / {{selectedSubCategory['title']}}</span>
+              </h2>
+            </ion-text>
+          </ion-col>
+          <ion-col class="ion-text-end">
+            <ion-button class="button-clear"
+                        style="margin-top: 10px;"
+                        *ngIf="selectedCategory && selectedSubCategory && isProductAdd"
+                        [disabled]="isPublishDisabled"
+                        (click)="onPublish()">Опубликовать
+            </ion-button>
+            <ion-button class="button-clear"
+                        style="margin-top: 10px;"
+                        *ngIf="categoryWasUpdated || subCategoryWasUpdated"
+                        (click)="onUpdateCategory()">Сохранить изменения
+            </ion-button>
+            <ion-button class="button-clear"
+                        style="margin-top: 10px;"
+                        *ngIf="!isProductAdd"
+                        (click)="onAdd('new')">Добавить
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <table class="table" *ngIf="!selectedCategory && !selectedSubCategory && !isProductAdd">
+          <tr>
+            <th>Название</th>
+            <th>Подкатегории</th>
+            <th>Элементы</th>
+            <th>Обьекты</th>
+            <th>Фоны</th>
+            <th></th>
+          </tr>
+          <tr *ngFor="let item of categories">
+            <td (click)="onSelectCategory(item)">{{item.title}}</td>
+            <td>{{item.subCategories.length}}</td>
+            <td>{{item.elements.length}}</td>
+            <td>{{item.objects.length}}</td>
+            <td>{{item.backgrounds.length}}</td>
+            <td>
+              <ion-button size="small" class="ion-no-margin button-clear" (click)="onEdit(item, 'category')">Редактировать</ion-button>
+              <ion-button size="small"  class="button-clear" (click)="presentAlert(item, 'category')">Удалить</ion-button>
+            </td>
+          </tr>
+        </table>
+
+        <ng-container *ngIf="selectedCategory && !selectedSubCategory && !isProductAdd">
+          <ion-segment [value]="activeInnerSegment" (ionChange)="onChangeInner($event)" class="ion-margin-bottom">
+            <ion-segment-button value="d">Подкатегории</ion-segment-button>
+            <ion-segment-button value="b">Фоны</ion-segment-button>
+            <ion-segment-button value="o">Объекты</ion-segment-button>
+            <ion-segment-button value="e">Элементы</ion-segment-button>
+          </ion-segment>
+          <ng-container *ngIf="activeInnerSegment === 'd'">
+            <p class="ion-padding ion-text-center" *ngIf="selectedCategory['subCategories'].length < 1">
+              В этой категории еще ничего нет
+            </p>
+            <table class="table" *ngIf="selectedCategory['subCategories'].length > 0">
+              <tr>
+                <th>Название</th>
+                <th>Проекты</th>
+                <th>Элементы</th>
+                <th>Обьекты</th>
+                <th>Фоны</th>
+                <th></th>
+              </tr>
+              <tr *ngFor="let item of selectedCategory['subCategories']">
+                <td (click)="onSelectSubCategory(item)">{{item.title}}</td>
+                <td>{{item.items.length}}</td>
+                <td>{{item.elements.length}}</td>
+                <td>{{item.objects.length}}</td>
+                <td>{{item.backgrounds.length}}</td>
+                <td>
+                  <ion-button size="small" class="ion-no-margin button-clear" (click)="onEdit(item, 'sub-category')">Редактировать</ion-button>
+                  <ion-button size="small"  class="button-clear" (click)="presentAlert(item, 'sub-category')">Удалить</ion-button>
+                </td>
+              </tr>
+            </table>
+          </ng-container>
+          <ng-container *ngIf="activeInnerSegment === 'b'">
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   (click)="onToggleBackground(el, 'category')"
+                   [class.active]="isSelectedInCategory(el.id, 'backgrounds')"
+                   *ngFor="let el of backgrounds">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/backgrounds/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeInnerSegment === 'o'">
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   (click)="onToggleObject(el, 'category')"
+                   [class.active]="isSelectedInCategory(el.id, 'objects')"
+                   *ngFor="let el of objects">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/objects/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeInnerSegment === 'e'">
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   (click)="onToggleElement(el, 'category')"
+                   [class.active]="isSelectedInCategory(el.id, 'elements')"
+                   *ngFor="let el of elements">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/elements/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="selectedCategory && selectedSubCategory && !isProductAdd">
+
+          <ion-segment [value]="activeSubCategorySegment" (ionChange)="onChangeSubCategory($event)" class="ion-margin-bottom">
+            <ion-segment-button value="d">Подкатегории</ion-segment-button>
+            <ion-segment-button value="b">Фоны</ion-segment-button>
+            <ion-segment-button value="o">Объекты</ion-segment-button>
+            <ion-segment-button value="e">Элементы</ion-segment-button>
+          </ion-segment>
+
+          <ng-container *ngIf="activeSubCategorySegment === 'd'">
+            <p class="ion-padding ion-text-center" *ngIf="selectedSubCategory['items'].length < 1">
+              В этой подкатегории еще ничего нет
+            </p>
+            <table class="table" *ngIf="selectedSubCategory['items'].length > 0">
+              <tr>
+                <th>ID</th>
+                <th>Элемент</th>
+                <th>Обьект</th>
+                <th>Фон</th>
+                <th>Кавер</th>
+                <th>Контент</th>
+                <th></th>
+              </tr>
+              <tr *ngFor="let item of selectedSubCategory['items']">
+                <td style="width: 150px" (click)="onSelectCategory(item)">{{item.id}}</td>
+                <td>
+                  <div class="gallery" style="width: 100px;margin: 0 auto;">
+                    <div class="gallery__item"
+                         [style.background-image]="'url(' + domain + '/assets/catalog/elements/' + item.element + ')'">
+                      <img src="../../assets/icons/placeholder.svg" alt="">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="gallery" style="width: 100px;margin: 0 auto;">
+                    <div class="gallery__item"
+                         [style.background-image]="'url(' + domain + '/assets/catalog/objects/' + item.object + ')'">
+                      <img src="../../assets/icons/placeholder.svg" alt="">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="gallery" style="width: 100px;margin: 0 auto;">
+                    <div class="gallery__item"
+                         [style.background-image]="'url(' + domain + '/assets/catalog/backgrounds/' + item.background + ')'">
+                      <img src="../../assets/icons/placeholder.svg" alt="">
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="gallery" style="width: 100px;margin: 0 auto;">
+                    <div class="gallery__item"
+                         [style.background-image]="'url(' + domain + '/assets/catalog/covers/' + item.cover + ')'">
+                      <img src="../../assets/icons/placeholder.svg" alt="">
+                    </div>
+                  </div>
+                </td>
+                <td style="text-align: center">{{item.content}}</td>
+                <td>
+                  <ion-button size="small" class="ion-no-margin button-clear" (click)="onEdit(item, 'item')">Редактировать</ion-button>
+                  <ion-button size="small"  class="button-clear" (click)="presentAlert(item, 'item')">Удалить</ion-button>
+                </td>
+              </tr>
+            </table>
+          </ng-container>
+          <ng-container *ngIf="activeSubCategorySegment === 'b'">
+            <div class="gallery">
+              <p class="ion-padding ion-text-center" *ngIf="selectedCategory['backgrounds']?.length < 1">Для категории не выбраны фоны</p>
+              <div class="gallery__wrapper"
+                   [class.active]="isSelectedInSubCategory(el.id, 'backgrounds')"
+                   *ngFor="let el of selectedCategory['backgrounds']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/backgrounds/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeSubCategorySegment === 'o'">
+            <div class="gallery">
+              <p class="ion-padding ion-text-center" *ngIf="selectedCategory['objects'].length < 1">Для категории не выбраны объекты</p>
+              <div class="gallery__wrapper"
+                   [class.active]="isSelectedInSubCategory(el.id, 'objects')"
+                   *ngFor="let el of selectedCategory['objects']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/objects/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeSubCategorySegment === 'e'">
+            <div class="gallery">
+              <p class="ion-padding ion-text-center" *ngIf="selectedCategory['elements'].length < 1">Для категории не выбраны элементы</p>
+              <div class="gallery__wrapper"
+                   [class.active]="isSelectedInSubCategory(el.id, 'elements')"
+                   *ngFor="let el of selectedCategory['elements']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/elements/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="selectedCategory && selectedSubCategory && isProductAdd">
+          <ion-segment [value]="activeProductSegment" (ionChange)="onChangeProduct($event)" class="ion-margin-bottom">
+            <ion-segment-button value="d">Информация</ion-segment-button>
+            <ion-segment-button value="b">Фон</ion-segment-button>
+            <ion-segment-button value="o">Объект</ion-segment-button>
+            <ion-segment-button value="e">Элемент</ion-segment-button>
+            <ion-segment-button value="с">Кавер</ion-segment-button>
+          </ion-segment>
+          <ng-container *ngIf="activeProductSegment === 'd'">
+            <ion-textarea type="text"
+                          maxlength="2200"
+                          placeholder="Контент поста..."
+                          auto-grow="true"
+                          [(ngModel)]="content">
+            </ion-textarea>
+          </ng-container>
+          <ng-container *ngIf="activeProductSegment === 'b'">
+            <p class="ion-padding ion-text-center" *ngIf="selectedCategory['backgrounds']?.length < 1">Для категории не выбраны фоны</p>
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   [class.active]="el.id === selected.background"
+                   (click)="onSelect('background', el.id)"
+                   *ngFor="let el of selectedCategory['backgrounds']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/backgrounds/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeProductSegment === 'o'">
+            <p class="ion-padding ion-text-center" *ngIf="selectedCategory['objects']?.length < 1">Для категории не выбраны обьекты</p>
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   [class.active]="el.id === selected.object"
+                   (click)="onSelect('object', el.id)"
+                   *ngFor="let el of selectedCategory['objects']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/objects/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeProductSegment === 'e'">
+            <p class="ion-padding ion-text-center" *ngIf="selectedCategory['elements']?.length < 1">Для категории не выбраны элементы'</p>
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   [class.active]="el.id === selected.element"
+                   (click)="onSelect('element', el.id)"
+                   *ngFor="let el of selectedCategory['elements']">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/elements/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="activeProductSegment === 'с'">
+            <div class="gallery">
+              <div class="gallery__wrapper"
+                   [class.active]="el.id === selected.cover"
+                   (click)="onSelect('cover', el.id)"
+                   *ngFor="let el of covers">
+                <div class="gallery__item"
+                     [style.background-image]="'url(' + domain + '/assets/catalog/covers/' + el.id + ')'">
+                  <img src="../../assets/icons/placeholder.svg" alt="">
+                </div>
+                <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+
+      </ng-container>
+      <ng-container *ngIf="activeSegment === 'objects'">
+        <ion-row>
+          <ion-col>
+            <ion-text color="primary">
+              <h2>Обьекты</h2>
+            </ion-text>
+          </ion-col>
+          <ion-col class="ion-text-end">
+            <ion-button class="button-clear" (click)="onAdd('objects')">Добавить</ion-button>
+          </ion-col>
+        </ion-row>
+        <div class="gallery">
+          <div class="gallery__wrapper"
+               *ngFor="let el of objects">
+            <div class="gallery__item"
+                 [style.background-image]="'url(' + domain + '/assets/catalog/objects/' + el.id + ')'">
+              <img src="../../assets/icons/trash.svg" alt="" class="delete" (click)="presentAlert(el, 'object')">
+              <img src="../../assets/icons/placeholder.svg" alt="">
+            </div>
+            <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="activeSegment === 'elements'">
+        <ion-row>
+          <ion-col>
+            <ion-text color="primary">
+              <h2>Элементы</h2>
+            </ion-text>
+          </ion-col>
+          <ion-col class="ion-text-end">
+            <ion-button class="button-clear" (click)="onAdd('elements')">Добавить</ion-button>
+          </ion-col>
+        </ion-row>
+        <div class="gallery">
+          <div class="gallery__wrapper"
+               *ngFor="let el of elements">
+            <div class="gallery__item"
+                 [style.background-image]="'url(' + domain + '/assets/catalog/elements/' + el.id + ')'">
+              <img src="../../assets/icons/trash.svg" alt="" class="delete" (click)="presentAlert(el, 'element')">
+              <img src="../../assets/icons/placeholder.svg" alt="">
+            </div>
+            <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="activeSegment === 'background'">
+        <ion-row>
+          <ion-col>
+            <ion-text color="primary">
+              <h2>Фоны</h2>
+            </ion-text>
+          </ion-col>
+          <ion-col class="ion-text-end">
+            <ion-button class="button-clear" (click)="onAdd('background')">Добавить</ion-button>
+          </ion-col>
+        </ion-row>
+        <div class="gallery">
+          <div class="gallery__wrapper"
+               *ngFor="let el of backgrounds">
+            <div class="gallery__item"
+                 [style.background-image]="'url(' + domain + '/assets/catalog/backgrounds/' + el.id + ')'">
+              <img src="../../assets/icons/trash.svg" alt="" class="delete" (click)="presentAlert(el, 'background')">
+              <img src="../../assets/icons/placeholder.svg" alt="">
+            </div>
+            <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="activeSegment === 'covers'">
+        <ion-row>
+          <ion-col>
+            <ion-text color="primary">
+              <h2>Каверы</h2>
+            </ion-text>
+          </ion-col>
+          <ion-col class="ion-text-end">
+            <ion-button class="button-clear" (click)="onAdd('cover')">Добавить</ion-button>
+          </ion-col>
+        </ion-row>
+        <div class="gallery">
+          <div class="gallery__wrapper"
+               *ngFor="let el of covers">
+            <div class="gallery__item"
+                 [style.background-image]="'url(' + domain + '/assets/catalog/covers/' + el.id + ')'">
+              <img src="../../assets/icons/trash.svg" alt="" class="delete" (click)="presentAlert(el, 'cover')">
+              <img src="../../assets/icons/placeholder.svg" alt="">
+            </div>
+            <p class="gallery__id">ID: <strong>{{el.id}}</strong></p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ion-content>
+
+  <ion-footer class="footer" *ngIf="isProductAdd || isProductEdit">
+    <ion-grid class="gallery">
+      <div class="ion-padding ion-align-items-center">
+        <ion-col>{{json}}</ion-col>
+        <!--<ion-col><ion-button size="small" class="button-clear" (click)="setOpen(false)">Опубликовать</ion-button></ion-col>-->
+      </div>
+    </ion-grid>
+  </ion-footer>
+
+</ng-container>
+
+
+<ion-modal [isOpen]="isModalOpen">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="setOpen(false)">Закрыть</ion-button>
+        </ion-buttons>
+        <ion-title class="ion-text-center">{{isEditMode ? 'Редактировать' : 'Добавить' }} {{addModalType}}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="onSave()">{{isEditMode ? 'Сохранить' : 'Добавить' }}</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <ion-item *ngIf="addModalType === 'категорию'">
+        <ion-label position="stacked">Введите название категории</ion-label>
+        <ion-input type="text"
+                   placeholder="Название категории..."
+                   [(ngModel)]="categoryName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="addModalType === 'подкатегорию'">
+        <ion-label position="stacked">Введите название подкатегории</ion-label>
+        <ion-input type="text"
+                   placeholder="Название подкатегории..."
+                   [(ngModel)]="subCategoryName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="addModalType === 'фон'">
+        <ion-label position="stacked">Введите название фона</ion-label>
+        <ion-input type="text"
+                   placeholder="Название подкатегории..."
+                   [(ngModel)]="bName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="addModalType === 'элемент'">
+        <ion-label position="stacked">Введите название элемента</ion-label>
+        <ion-input type="text"
+                   placeholder="Название подкатегории..."
+                   [(ngModel)]="eName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="addModalType === 'обьект'">
+        <ion-label position="stacked">Введите название обьекта</ion-label>
+        <ion-input type="text"
+                   placeholder="Название подкатегории..."
+                   [(ngModel)]="oName">
+        </ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="addModalType === 'кавер'">
+        <ion-label position="stacked">Введите название кавера</ion-label>
+        <ion-input type="text"
+                   placeholder="Название подкатегории..."
+                   [(ngModel)]="cName">
+        </ion-input>
+      </ion-item>
+    </ion-content>
+  </ng-template>
+</ion-modal>

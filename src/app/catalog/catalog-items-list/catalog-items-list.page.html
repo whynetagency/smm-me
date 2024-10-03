@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/catalog"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{activeSubCategory ? activeSubCategory.title : ''}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="activeSubCategory">
+    <ion-searchbar (ionChange)="getItems($event)" placeholder="Поиск..."></ion-searchbar>
+    <ion-grid class="layout layout_grid">
+      <ion-row>
+        <ion-col class="item item_grid" size="4"
+                 *ngFor="let item of items">
+          <div class="item__inner" [routerLink]="'./' + item.id">
+            <ion-img [src]="domain + '/assets/catalog/covers/' + item.cover"
+                     class="item__image">
+            </ion-img>
+          </div>
+          <div class="item__rating" *ngIf="isRatingReady">
+            <star-rating [starType]="'svg'"
+                         [disabled]="isRatingDisabled(item)"
+                         [rating]="onGetRating(item.id)"
+                         (starClickChange)="onRatingChange(item, $event)"></star-rating>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+</ion-content>

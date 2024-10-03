@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Выберите категорию</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="'/projects'">
+        <ion-icon name="save-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="data">
+    <ion-searchbar (ionChange)="getItems($event)" placeholder="Поиск..."></ion-searchbar>
+
+    <ng-container *ngFor="let category of items; let i = index">
+      <ng-container *ngIf="category.subCategories.length > 0">
+        <div class="ion-padding-start">
+          <ion-text color="primary">
+            <h2>{{category.title}}</h2>
+          </ion-text>
+        </div>
+        <ion-grid class="layout layout_grid">
+          <ion-row>
+            <ion-col class="item item_grid" size="4"
+                     [routerLink]="'./' + category.id"
+                     *ngFor="let item of category['subCategories'][0]['items'] | slice:0:3">
+              <div class="item__inner">
+                <ion-img [src]="domain + '/assets/catalog/covers/' + item.cover"
+                         class="item__image">
+                </ion-img>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ion-content>
+

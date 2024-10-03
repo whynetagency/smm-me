@@ -1,0 +1,39 @@
+.notch {
+  width: 60px;
+  height: 3px;
+  margin: 20px auto;
+  background-color: var(--ion-color-medium);
+}
+
+.title{
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--ion-color-primary, #3880ff);
+}
+.item{
+  &__image{
+    border-radius: 10px;
+    image{
+      border-radius: 5px;
+    }
+    width: 30px;
+  }
+  &-hidden{
+    display: none;
+  }
+}
+.no-results{
+  margin-top: 50px;
+  &__img{
+    width: 150px;
+    margin: 0 auto;
+  }
+}
+ion-img::part(image) {
+  border-radius: 5px;
+}
+.item__title h3 {
+  font-weight: 600;
+}

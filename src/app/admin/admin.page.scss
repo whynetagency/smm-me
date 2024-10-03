@@ -1,0 +1,86 @@
+.gallery{
+  &__wrapper{
+    cursor: pointer;
+    width: calc(20% - 10px);
+    float: none;
+    height: 100%;
+    display: inline-block;
+    zoom: 1;
+    white-space: initial;
+    vertical-align: top;
+    background: rgba(0, 0, 0, 0.05) center no-repeat;
+    margin: 5px;
+    border-radius: 10px;
+    background-size: contain;
+    overflow: hidden;
+    padding: 10px 10px 20px;
+    border: solid 1px #dedede;
+    &.active{
+      border-color: #3880ff;
+      .gallery__id{
+        background: #3880ff;
+        color: #fff;
+      }
+    }
+  }
+  &__id{
+    margin: 10px -10px -20px;
+    background: #dedede;
+    padding: 5px 10px;
+  }
+  &__item{
+    position: relative;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    &:hover{
+      .delete{
+        display: block;
+      }
+    }
+    .delete {
+      display: none;
+      position: absolute;
+      width: 40px !important;
+      height: 50px;
+      background: rgba(0, 0, 0, .8);
+      right: 0;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    img{
+      width: 100%;
+    }
+  }
+}
+.footer{
+  background: #3880ff;
+  color: #fff;
+}
+.table{
+  width: 100%;
+  text-align: right;
+  tr{
+    cursor: pointer;
+    border-bottom: solid 1px #ccc;
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+    &:hover{
+      td:first-child{
+        color: #3880ff;
+      }
+    }
+    th{
+      padding: 5px 10px;
+    }
+    td{
+      padding: 5px 10px;
+      border-right: solid 1px #ccc;
+      &:last-child{
+        width: 1%;
+        white-space: nowrap;
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+<ion-header>
+  <div class="notch" tapapble (click)="close()"></div>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()" color="primary">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ <ng-container *ngIf="data">
+   <ion-searchbar (ionChange)="getItems($event)" placeholder="Поиск..."></ion-searchbar>
+   <ion-grid class="layout layout_grid">
+     <ion-row>
+       <ion-col class="item item_grid" size="4"
+                (click)="onSelect(item.id)"
+                *ngFor="let item of items">
+         <div class="item__inner">
+           <div class="editor-item"
+                [class.editor-item_cover]="type === 'background'"
+                [ngStyle]="{'background-image': routeSrc + item.id + '.png)'}">
+             <img src="../../../assets/icons/placeholder.svg" alt="">
+           </div>
+         </div>
+       </ion-col>
+     </ion-row>
+   </ion-grid>
+ </ng-container>
+</ion-content>

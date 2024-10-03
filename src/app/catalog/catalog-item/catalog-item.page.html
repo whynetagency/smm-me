@@ -1,0 +1,374 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/catalog'"></ion-back-button>
+    </ion-buttons>
+    <ion-title>SMMme редактор</ion-title>
+    <ion-buttons slot="end" *ngIf="!isImageReady">
+      <ion-button (click)="presentActionSheet()">
+        <ion-icon name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="content">
+  <ng-container *ngIf="isImageReady">
+    <div class="ion-padding ion-text-center">
+      <div [innerHTML]="finalImage"></div>
+      <p class="post-content">{{item.content}}</p>
+      <ion-button class="ion-margin-top" (click)="downloadImage()">Сохранить</ion-button>
+      <ion-button class="ion-margin-top" (click)="onCopyToClipboard()">Скопировать контент</ion-button>
+      <!--<div class="ion-text-center ion-padding" (click)="myBackButton()">Вернуться к каталогу</div>-->
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!isImageReady">
+    <ion-fab vertical="top" horizontal="start" slot="fixed">
+      <ion-fab-button color="dark">
+        <ion-icon name="cube-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="bottom">
+        <ion-fab-button (click)="bringToFront()">
+          <fa-icon icon="level-up"></fa-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="sendToBack()">
+          <fa-icon icon="level-down"></fa-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="removeSelected()">
+          <fa-icon icon="trash"></fa-icon>
+        </ion-fab-button>
+      </ion-fab-list>
+    </ion-fab>
+    <div class="editor" #editorWrapper [ngClass]="activeFilter">
+      <canvas #editorCanvas></canvas>
+      <img style="width: 100% !important;" *ngIf="canvasFormat === '1:1'" src="../../../assets/icons/placeholder.svg" alt="">
+      <img style="width: 100% !important;" *ngIf="canvasFormat === '4:5'" src="../../../assets/icons/placeholder-2.svg" alt="">
+      <img style="width: 100% !important;" *ngIf="canvasFormat === '9:16'" src="../../../assets/icons/placeholder-3.svg" alt="">
+    </div>
+
+    <div [ngSwitch]="editorSection" class="tools" *ngIf="editorSection">
+      <div *ngSwitchCase="'text'" class="ion-padding-start ion-padding-end">
+        <div class="editor-title" style="padding-top: 15px">
+          <ion-input placeholder="Введите текст..."
+                     [(ngModel)]="textString"
+                     [value]="textString"></ion-input>
+          <ion-button size="small" color="primary" fill="outline" (click)="addText()">Добавить текст</ion-button>
+          <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </div>
+
+        <div class="editor-item-config ion-padding-bottom ion-padding-top" [class.disabled]="!isTextOptionsAvailable">
+          <div class="btn-group">
+            <div class="editor-item-config">
+              <button type="button"
+                      class="btn btn-palette"
+                      [cpPosition]="'top'"
+                      [(colorPicker)]="props.fill"
+                      (colorPickerChange)="setFill()">
+                <fa-icon icon="palette"></fa-icon>
+                <div class="btn-palette_color" [style.background]="props.fill"></div>
+              </button>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn" [ngClass]="{'active': props.fontWeight }" (click)="setBold()">
+              <fa-icon icon="bold"></fa-icon>
+            </button>
+            <button type="button" class="btn" [ngClass]="{'active': props.fontStyle }" (click)="setFontStyle()">
+              <fa-icon icon="italic"></fa-icon>
+            </button>
+            <button type="button" class="btn" [ngClass]="{'active': hasTextDecoration('underline') }" (click)="setTextDecoration('underline')">
+              <fa-icon icon="underline"></fa-icon>
+            </button>
+            <!--<button type="button" class="btn" [ngClass]="{'active': hasTextDecoration('line-through') }" (click)="setTextDecoration('line-through')">
+              <fa-icon icon="strikethrough"></fa-icon>
+            </button>-->
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn" [ngClass]="{'active': props.textAlign === 'left' }" (click)="setTextAlign('left')">
+              <fa-icon icon="align-left"></fa-icon>
+            </button>
+            <button type="button" class="btn" [ngClass]="{'active': props.textAlign === 'center' }" (click)="setTextAlign('center')">
+              <fa-icon icon="align-center"></fa-icon>
+            </button>
+            <button type="button" class="btn" [ngClass]="{'active': props.textAlign === 'right' }" (click)="setTextAlign('right')">
+              <fa-icon icon="align-right"></fa-icon>
+            </button>
+            <button type="button" class="btn" [ngClass]="{'active': props.textAlign === 'justify' }" (click)="setTextAlign('justify')">
+              <fa-icon icon="align-justify"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <ion-list [class.disabled]="!isTextOptionsAvailable">
+          <ion-item>
+            <ion-label>Шрифт</ion-label>
+            <ion-select placeholder="Шрифт не выбран..."
+                        [(ngModel)]="props.fontFamily"
+                        (ionChange)="setFontFamily()">
+              <ion-select-option *ngFor="let font of fonts" [value]="font.name">{{font.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <ion-grid [class.disabled]="!isTextOptionsAvailable">
+          <ion-row>
+            <!--<ion-col size="6">
+              <div class="editor-item-config">
+                <ion-range (ionChange)="onFontSizeChange($event)" [value]="props.fontSize">
+                  <fa-icon slot="start" icon="font"></fa-icon>
+                </ion-range>
+              </div>
+            </ion-col>-->
+            <ion-col size="6">
+              <div class="editor-item-config">
+                <ion-range (ionChange)="onLetterSpacingChange($event)" [value]="props.charSpacing">
+                  <fa-icon slot="start" icon="text-width"></fa-icon>
+                </ion-range>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="editor-item-config">
+                <ion-range (ionChange)="onLineHeightChange($event)" [value]="props.lineHeight">
+                  <fa-icon slot="start" icon="text-height"></fa-icon>
+                </ion-range>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+      </div>
+      <div *ngSwitchCase="'content'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Контент</h5>
+          </ion-text>
+          <div>
+            <ion-button (click)="onCopyToClipboard()"
+                        size="small" color="primary" fill="outline">Скопировать</ion-button>
+            <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="editor-item-wrapper">
+          <ion-textarea [readonly]="true" [rows]="5" placeholder="Текст поста..." [(ngModel)]="item.content"></ion-textarea>
+        </div>
+      </div>
+      <div *ngSwitchCase="'object'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Обьект</h5>
+          </ion-text>
+          <div style="display: flex; align-items: center">
+            <input id="cf2" type="file" (change)="readUrl($event);">
+            <label for="cf2" class="button-upload">Загрузить</label>
+            <ion-button (click)="onOpenFilters('object')"
+                        size="small" color="primary" fill="outline">Выбрать</ion-button>
+            <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="editor-item-wrapper">
+          <div class="editor-item"
+               [class.active]="editorItem.object === item"
+               (click)="onObjectSelect(item)"
+               *ngFor="let item of objects"
+               [ngStyle]="{'background-image': 'url' + domain + '/assets/catalog/objects/' + item + '.png)'}">
+            <img src="../../../assets/icons/placeholder.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="'element'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Элемент</h5>
+          </ion-text>
+          <div style="display: flex; align-items: center">
+            <input id="cf1" type="file" (change)="readUrl($event);">
+            <label for="cf1" class="button-upload">Загрузить</label>
+            <ion-button (click)="onOpenFilters('element')"
+                        size="small" color="primary" fill="outline">Выбрать</ion-button>
+            <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="editor-item-wrapper">
+          <div class="editor-item"
+               [class.active]="editorItem.element === item"
+               (click)="onElementSelect(item)"
+               *ngFor="let item of elements"
+               [ngStyle]="{'background-image': 'url(' + domain + '/assets/catalog/elements/' + item + '.png)'}">
+            <img src="../../../assets/icons/placeholder.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="'background'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Выберите фон</h5>
+          </ion-text>
+          <div>
+            <ion-button (click)="onOpenFilters('background')"
+                        size="small" color="primary" fill="outline">Выбрать</ion-button>
+            <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="editor-item-wrapper">
+          <div class="editor-item editor-item_cover"
+               [class.active]="editorItem.background === item"
+               (click)="onBackgroundSelect(item)"
+               *ngFor="let item of backgrounds"
+               [ngStyle]="{'background-image': 'url' + domain + '/assets/catalog/backgrounds/' + item + '.png)'}">
+            <img src="../../../assets/icons/placeholder.svg" alt="">
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="'format'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Выберите фильтр</h5>
+          </ion-text>
+          <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="editor-item-wrapper">
+          <div class="editor-item editor-item_cover {{item.class}}"
+               [class.active]="item.class === activeFilter"
+               (click)="onSelectFilter(item)"
+               *ngFor="let item of filters"
+               [ngStyle]="{'background-image': 'url' + domain + '/assets/image-placeholder.png)'}">
+            <img src="../../../assets/icons/placeholder.svg" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'magic'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Make Magic</h5>
+          </ion-text>
+          <div>
+            <ion-button (click)="onResetGamma()"
+                        size="small" color="primary" fill="outline">Сброс</ion-button>
+            <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+        <div class="editor-item-wrapper">
+          <ion-list>
+            <ion-item class="ion-no-padding">
+              <ion-label>Красный</ion-label>
+              <ion-range
+                (ionChange)="gammaChange($event.target.value, 0)"
+                [min]="gamma.red.min"
+                [max]="gamma.red.max"
+                [step]="gamma.red.step"
+                [(ngModel)]="gamma.red.value"
+                [disabled]="!isFiltersAvailable"></ion-range>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-label>Зеленый</ion-label>
+              <ion-range
+                (ionChange)="gammaChange($event.target.value, 1)"
+                [min]="gamma.green.min"
+                [max]="gamma.green.max"
+                [step]="gamma.green.step"
+                [(ngModel)]="gamma.green.value"
+                [disabled]="!isFiltersAvailable"></ion-range>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+              <ion-label>Синий</ion-label>
+              <ion-range
+                (ionChange)="gammaChange($event.target.value, 2)"
+                [min]="gamma.blue.min"
+                [max]="gamma.blue.max"
+                [step]="gamma.blue.step"
+                [(ngModel)]="gamma.blue.value"
+                [disabled]="!isFiltersAvailable"></ion-range>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'formq'" class="ion-padding">
+        <div class="editor-title">
+          <ion-text color="primary">
+            <h5>Выберите формат</h5>
+          </ion-text>
+          <ion-button size="small" color="medium" fill="solid" (click)="onHideSegment()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="editor-item-wrapper">
+          <ion-list>
+            <ion-radio-group value="1:1">
+              <ion-item>
+                <ion-label>Формат: 1:1</ion-label>
+                <ion-radio slot="end" value="1:1" (ionFocus)="changeSize($event.target.value)"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Формат: 4:5</ion-label>
+                <ion-radio slot="end" value="4:5" (ionFocus)="changeSize($event.target.value)"></ion-radio>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Формат: 9:16</ion-label>
+                <ion-radio slot="end" value="9:16" (ionFocus)="changeSize($event.target.value)"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </div>
+      </div>
+
+
+    </div>
+  </ng-container>
+</ion-content>
+<ion-footer collapse="fade" *ngIf="!isImageReady">
+  <ion-toolbar class="bottom-toolbar">
+    <ion-segment class="editor-nav"
+                 [scrollable]="true"
+                 [(ngModel)]="editorSection">
+      <ion-segment-button value="text">
+        <ion-icon name="text-outline"></ion-icon>
+        <ion-label>Текст</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="object">
+        <ion-icon name="planet-outline"></ion-icon>
+        <ion-label>Объект</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="element">
+        <ion-icon name="extension-puzzle-outline"></ion-icon>
+        <ion-label>Элемент</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="background">
+        <ion-icon name="images-outline"></ion-icon>
+        <ion-label>Фон</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="content">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <ion-label>Контент</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="magic">
+        <ion-icon name="color-wand-outline"></ion-icon>
+        <ion-label>Magic</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="format">
+        <ion-icon name="color-filter-outline"></ion-icon>
+        <ion-label>Фильтр</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="formq">
+        <ion-icon name="expand-outline"></ion-icon>
+        <ion-label>Формат</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>

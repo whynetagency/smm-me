@@ -1,0 +1,43 @@
+<ion-content>
+  <ion-slides pager="true"
+              (ionSlideNextEnd)="onNext()"
+              (ionSlidePrevEnd)="onPrev()">
+    <ion-slide class="ion-padding ion-slide_1">
+      <img src="../../../assets/onboarding/1.png">
+
+      <div class="slider-text">
+        <h2>Добро пожаловать в SMMme!</h2>
+      </div>
+    </ion-slide>
+    <ion-slide class="ion-padding ion-slide_2">
+      <img src="../../../assets/onboarding/2.png">
+
+      <div class="slider-text">
+        <h2>Выберите категорию и дизайна</h2>
+      </div>
+    </ion-slide>
+    <ion-slide class="ion-padding ion-slide_3">
+      <img src="../../../assets/onboarding/3.png">
+      <div class="slider-text">
+        <h2>Измените текст <br> и объект</h2>
+      </div>
+    </ion-slide>
+    <ion-slide class="ion-padding ion-slide_4">
+      <img src="../../../assets/onboarding/4.png">
+      <div class="slider-text">
+        <h2>Сохраните и начните наполнять инстаграм</h2>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <div class="navigator ion-padding">
+    <ion-button size="small" color="light" fill="clear" (click)="getStarted()"
+                *ngIf="activeSlide === 1">ПРОПУСТИТЬ</ion-button>
+    <ion-button size="small" color="light" fill="clear" (click)="prev()"
+                *ngIf="activeSlide !== 1 && activeSlide !== 4">НАЗАД</ion-button>
+    <ion-button size="small" color="light" fill="clear" (click)="next()"
+                *ngIf="activeSlide !== 4">ВПЕРЕД</ion-button>
+    <div *ngIf="activeSlide === 4"></div>
+    <ion-button size="small" color="light" fill="clear" (click)="getStarted()"
+                *ngIf="activeSlide === 4">ПРИСТУПИТЬ</ion-button>
+  </div>
+</ion-content>

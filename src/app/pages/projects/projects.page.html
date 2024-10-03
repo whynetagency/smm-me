@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="catalog"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Мои проекты</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="data">
+  <ion-list>
+    <ion-item-sliding *ngFor="let project of projects" class="sliding">
+      <ion-item [routerLink]="onGetLink(project.item)"
+                [queryParams]="{ project: project.id }">
+        <ion-img [src]="domain + '/assets/catalog/backgrounds/' + project.item.background + '.png'"
+                 class="item__image"
+                 slot="start">
+        </ion-img>
+        <ion-label class="item__title">
+          <h3>{{project.title}}</h3>
+          <p>{{onGetCategory(project.item)}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option (click)="onRemove(project)">
+          <div class="ion-padding-start ion-padding-end">
+            <ion-icon name="trash-outline"></ion-icon>
+          </div>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>
+

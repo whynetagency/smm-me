@@ -1,0 +1,6 @@
+{
+	"appId": "com.smmme.app",
+	"appName": "smme",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

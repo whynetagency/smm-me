@@ -1,0 +1,350 @@
+{
+  "categories": [
+    {
+      "id": "food",
+      "title": "Медицина",
+      "tags": [],
+      "subCategories": [
+        {
+          "id": "food-3",
+          "title": "Кабинет сестры",
+          "tags": [],
+          "items": [
+            {
+              "id": "food-2",
+              "object": "1",
+              "element": "2",
+              "background": "3",
+              "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+              "tags": []
+            },
+            {
+              "id": "food-4",
+              "object": "3",
+              "element": "2",
+              "background": "4",
+              "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+              "tags": []
+            },
+            {
+              "id": "food-8",
+              "object": "2",
+              "element": "2",
+              "background": "6",
+              "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+              "tags": []
+            }
+          ],
+          "elements": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "objects": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8"
+          ],
+          "backgrounds": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        {
+          "id": "food",
+          "title": "Кафе, рестораны",
+          "tags": [],
+          "subCategories": [
+            {
+              "id": "food-3",
+              "title": "Донерные",
+              "tags": [],
+              "items": [
+                {
+                  "id": "food-4",
+                  "object": "3",
+                  "element": "2",
+                  "background": "4",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-2",
+                  "object": "1",
+                  "element": "2",
+                  "background": "3",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-4",
+                  "object": "3",
+                  "element": "2",
+                  "background": "4",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-8",
+                  "object": "2",
+                  "element": "2",
+                  "background": "6",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                }
+              ],
+              "elements": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "objects": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
+              "backgrounds": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ]
+            },
+            {
+              "id": "food-3",
+              "title": "Название",
+              "tags": [],
+              "items": [
+                {
+                  "id": "food-2",
+                  "object": "1",
+                  "element": "2",
+                  "background": "3",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-4",
+                  "object": "3",
+                  "element": "2",
+                  "background": "4",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-8",
+                  "object": "2",
+                  "element": "2",
+                  "background": "6",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                }
+              ],
+              "elements": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "objects": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
+              "backgrounds": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ]
+            },
+            {
+              "id": "food-4",
+              "title": "Кофейни",
+              "tags": [],
+              "items": [
+                {
+                  "id": "food-10",
+                  "object": "12",
+                  "element": "7",
+                  "background": "7",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-11",
+                  "object": "9",
+                  "element": "7",
+                  "background": "7",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                },
+                {
+                  "id": "food-12",
+                  "object": "11",
+                  "element": "7",
+                  "background": "7",
+                  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...",
+                  "tags": []
+                }
+              ],
+              "elements": [
+                "7"
+              ],
+              "objects": [
+                "9",
+                "10",
+                "11",
+                "12"
+              ],
+              "backgrounds": [
+                "7"
+              ]
+            }
+          ]
+        }
+      ],
+      "objects": [
+        {
+          "id": "1.png",
+          "tags": []
+        },
+        {
+          "id": "2.png",
+          "tags": []
+        },
+        {
+          "id": "3.png",
+          "tags": []
+        },
+        {
+          "id": "4.png",
+          "tags": []
+        },
+        {
+          "id": "5.png",
+          "tags": []
+        },
+        {
+          "id": "6.png",
+          "tags": []
+        },
+        {
+          "id": "7.png",
+          "tags": []
+        },
+        {
+          "id": "8.png",
+          "tags": []
+        },
+        {
+          "id": "9.png",
+          "tags": []
+        },
+        {
+          "id": "10.png",
+          "tags": []
+        },
+        {
+          "id": "11.png",
+          "tags": []
+        },
+        {
+          "id": "12.png",
+          "tags": []
+        }
+      ],
+      "elements": [
+        {
+          "id": "1.png",
+          "tags": []
+        },
+        {
+          "id": "2.png",
+          "tags": []
+        },
+        {
+          "id": "3.png",
+          "tags": []
+        },
+        {
+          "id": "4.png",
+          "tags": []
+        },
+        {
+          "id": "5.png",
+          "tags": []
+        },
+        {
+          "id": "6.png",
+          "tags": []
+        },
+        {
+          "id": "7.png",
+          "tags": []
+        }
+      ],
+      "backgrounds": [
+        {
+          "id": "1.png",
+          "tags": []
+        },
+        {
+          "id": "2.png",
+          "tags": []
+        },
+        {
+          "id": "3.png",
+          "tags": []
+        },
+        {
+          "id": "4.png",
+          "tags": []
+        },
+        {
+          "id": "5.png",
+          "tags": []
+        },
+        {
+          "id": "6.png",
+          "tags": []
+        },
+        {
+          "id": "7.png",
+          "tags": []
+        }
+      ]
+    }
+  ]
+}

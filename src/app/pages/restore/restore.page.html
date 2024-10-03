@@ -1,0 +1,27 @@
+<ion-content [fullscreen]="true" class="restore">
+  <ion-grid class="ion-padding h-100">
+    <ion-row class="h-100">
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-padding-top">
+          <!--<img [src]="'../../../assets/restore.png'"
+               class="restore__logo"
+               alt="SMMme">-->
+          <p class="restore__title">Забыли пароль?</p>
+          <p class="restore__sub-title">Введите Email для доступа к аккаунту.</p>
+        </div>
+        <form (ngSubmit)="restore()" [formGroup]="restoreForm">
+          <input type="email"
+                 placeholder="Введите email"
+                 name="email"
+                 formControlName="email"
+                 class="restore__input restore__input_email">
+          <div class="ion-text-center ion-margin-top ion-margin-bottom ion-padding-top ion-padding-bottom restore__login">
+            <a routerLink="/login" class="restore__link">Вернуться ко входу</a>
+          </div>
+          <ion-button type="submit" expand="block" [disabled]="!restoreForm.valid">Регистрация</ion-button>
+
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

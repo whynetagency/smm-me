@@ -1,0 +1,22 @@
+<ion-content [fullscreen]="true" class="verify">
+  <ion-grid class="ion-padding h-100">
+    <ion-row class="h-100">
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-padding-top">
+          <!--<img [src]="'../../../assets/verify.png'"
+               class="verify__logo"
+               alt="SMMme">-->
+          <div *ngIf="authService['user'] as user">
+            <p class="verify__title">Подтвердите Ваш Email</p>
+            <p class="verify__sub-title">Ссылка отправлена на Ваш Email:</p>
+            <strong class="ion-padding">{{user['email']}}</strong>
+          </div>
+        </div>
+        <div class="ion-text-center ion-margin-top ion-margin-bottom ion-padding-top ion-padding-bottom verify__login">
+          <a (click)="authService.SendVerificationMail()" class="verify__link">Отправить повторно</a>
+        </div>
+        <ion-button expand="block" routerLink="/login">Логин</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

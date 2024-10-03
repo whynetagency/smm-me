@@ -1,0 +1,50 @@
+<ion-content [fullscreen]="true" class="login">
+  <ion-grid class="ion-padding h-100">
+    <ion-row class="h-100">
+      <ion-col class="ion-align-self-center">
+        <div class="ion-text-center ion-padding-top">
+          <!--<img [src]="'../../../assets/logo_s.png'"
+               routerLink="/catalog"
+               class="login__logo"
+               alt="SMMme">-->
+          <p class="login__title">Добро пожаловать</p>
+          <p class="login__sub-title">Введите Ваши данные для входа</p>
+        </div>
+        <form (ngSubmit)="login()" [formGroup]="loginForm" autocomplete="off">
+          <input type="email"
+                 placeholder="Логин"
+                 name="email"
+                 formControlName="email"
+                 class="login__input login__input_name">
+          <input type="password"
+                 placeholder="Пароль"
+                 name="password"
+                 formControlName="password"
+                 class="login__input login__input_pass">
+          <p class="ion-text-right ion-padding-top ion-padding-bottom">
+            <a routerLink="/restore" class="login__restore">Забыли пароль?</a>
+          </p>
+          <ion-button type="submit" expand="block" [disabled]="!loginForm.valid">Вход</ion-button>
+        </form>
+        <div class="ion-text-center ion-padding-top ion-padding-bottom login__register">
+          Нет аккаунта?
+          <a routerLink="/register" class="login__link">Регистрация</a>
+        </div>
+        <div class="ion-text-center">или</div>
+        <div class="social">
+          <a
+            (click)="auth.googleAuth()" class="social__btn social__btn_g">
+            <img src="../../../assets/icons/google.svg" alt="">Продолжить с Google
+          </a><!--
+          <a (click)="onSocialLogin()" class="social__btn social__btn_f">
+            <img src="../../../assets/icons/facebook.svg" alt="">
+          </a>
+          <a (click)="onSocialLogin()" class="social__btn social__btn_i">
+            <img src="../../../assets/icons/instagram.svg" alt="">
+          </a>-->
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

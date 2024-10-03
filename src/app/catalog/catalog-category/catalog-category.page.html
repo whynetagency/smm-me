@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/catalog"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{activeCategory ? activeCategory.title : ''}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="activeCategory">
+    <ion-searchbar (ionChange)="getItems($event)" placeholder="Поиск..."></ion-searchbar>
+    <ng-container *ngFor="let category of items">
+      <div class="ion-padding-start">
+        <ion-text color="primary">
+          <h2>{{category.title}}</h2>
+        </ion-text>
+      </div>
+      <ion-grid class="layout layout_grid">
+        <ion-row>
+          <ion-col class="item item_grid" size="4"
+                   *ngFor="let item of category['items'] | slice:0:3"
+                   [routerLink]="'./' + category.id">
+            <div class="item__inner">
+              <ion-img [src]="domain + '/assets/catalog/covers/' + item.cover"
+                       class="item__image">
+              </ion-img>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+  </ng-container>
+</ion-content>

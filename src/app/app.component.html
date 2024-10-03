@@ -1,0 +1,74 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="overlay">
+      <ion-content>
+        <ng-container *ngIf="isAdmin">
+          <div class="ion-padding">
+            <ion-text color="primary">
+              <h3><strong>Загрузка контента</strong></h3>
+              <p>- Подключаемся через <strong>FTP</strong> или заходим на <strong>хостинг</strong></p>
+              <p>- Весь контент находится в папке: <br><strong>src/assets/catalog</strong></p>
+              <p>- Каверы находятся в папке:<br><strong>src/assets/catalog/covers</strong></p>
+              <p>- Фоны находятся в папке:<br><strong>src/assets/catalog/background</strong></p>
+              <p>- Обьекты находятся в папке:<br><strong>src/assets/catalog/objects</strong></p>
+              <p>- Элементы находятся в папке:<br><strong>src/assets/catalog/elements</strong></p>
+            </ion-text>
+          </div>
+          <div class="ion-padding">
+            <ion-text color="primary">
+              <h3><strong>Подгонка элемента</strong></h3>
+              <p>- Перейдите в <strong [routerLink]="'/catalog'">каталог</strong></p>
+              <p>- Найдите нужный <strong>креатив</strong></p>
+              <p>- Внесите <strong>изменения</strong></p>
+              <p>- Нажмите иконку <strong>меню</strong></p>
+              <p>- Нажмите <strong>Обновить JSON</strong></p>
+              <p>- <strong>Готово!</strong></p>
+            </ion-text>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!isAdmin">
+          <!--<ion-list>
+            <ion-list-header>Порекомендовать</ion-list-header>
+            <ion-item href="#" lines="none">
+              <ion-icon name="share-social-outline" slot="start" size="small"></ion-icon>
+              <ion-label>Порекомендовать другу</ion-label>
+            </ion-item>
+            <ion-item href="#" lines="none">
+              <ion-icon name="logo-apple" slot="start" size="small"></ion-icon>
+              <ion-label>Оценить нас в App Store</ion-label>
+            </ion-item>
+          </ion-list>-->
+
+          <ion-list>
+            <ion-list-header>Юр.информация</ion-list-header>
+            <ion-item (click)="onOpenTerms()" lines="none">
+              <ion-label>Условия использования</ion-label>
+            </ion-item>
+            <ion-item (click)="onOpenPrivacy()" lines="none">
+              <ion-label>Политика конфиденциальности</ion-label>
+            </ion-item>
+          </ion-list>
+
+          <ion-list>
+            <ion-list-header>О приложении</ion-list-header>
+           <!-- <ion-item lines="none">
+              <ion-label>Ваша версия</ion-label>
+              <ion-badge color="medium" slot="end">v1.0</ion-badge>
+            </ion-item>-->
+            <ion-item lines="none">
+              <ion-label>Разработка</ion-label>
+              <a href="https://whynet.com.ua" target="_blank">
+                <ion-badge color="medium" slot="end">WhyNet</ion-badge>
+              </a>
+            </ion-item>
+          </ion-list>
+
+          <div class="ion-text-center ion-margin-bottom">
+            <ion-button class="button-clear" (click)="onLogout()">Выйти</ion-button>
+          </div>
+        </ng-container>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

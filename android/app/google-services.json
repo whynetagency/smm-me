@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "215243618834",
+    "project_id": "smme-e453e",
+    "storage_bucket": "smme-e453e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215243618834:android:237e70bfddbb9c2fc376cb",
+        "android_client_info": {
+          "package_name": "com.smmme.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215243618834-s2aap4sk40tstthilq1ugqo1vutj2bb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwCzMOzWy8M2LnXthADsa7thUhZIu8AuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215243618834-s2aap4sk40tstthilq1ugqo1vutj2bb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
